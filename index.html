@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="brainf*ckベースの喘ぎ声インタプリンタです">
+    <meta name="author" content="takayun">
+    <meta name="keywords" content="あえぎ声いんたぷりんた！,あえぎ声,喘ぎ声,インタプリンタ,brainf*ck">
+    <title>あえぎ声いんたぷりんた！</title>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- StyleSheet -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="//anzumare.net/bfi/style.css">
+    <!-- 喘ぎ声インタプリンタ -->
+    <script src="aegi_core.js"></script>
+    <script src="//anzumare.net/bfi/aegi_core.js"></script>
+    <script src="aegi_fast.js"></script>
+    <script src="//anzumare.net/bfi/aegi_fast.js"></script>
+    <script src="aegi_init.js"></script>
+    <script src="//anzumare.net/bfi/aegi_init.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarTarget" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">あえぎ声いんたぷりんた！</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarTarget">
+                <ul class="nav navbar-nav">
+                    <li><a href="//anzumare.net">anzumare.net</a></li>
+                    <li><a data-toggle="modal" data-target="#helpModal">使い方</a></li>
+                </ul>
+                <button type="button" class="btn btn-success navbar-btn" id="run">RUN</button>
+                <button type="button" class="btn btn-danger navbar-btn" id="stop">STOP</button>
+                <button type="button" class="btn btn-warning navbar-btn" id="step">STEP</button>
+                <button type="button" class="btn btn-default navbar-btn" id="reset">RESET</button>
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="number" class="form-control" placeholder="ﾐﾘ秒/ステップ" id="step_sec">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="check_debug" checked> DEBUG_MODE
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <section class="modal fade" id="helpModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                        <h4 class="modal-title">使い方</h4>
+                    </div>
+                    <div class="modal-body">
+                        このインタプリンタはBrainfuckベースのあえぎ声記述言語のインタプリンタです。<br>Brainfuckのトークンとの対応は以下の表の通りです。
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            対応表
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Brainfuck</th>
+                                    <th>あえぎ声記述言語</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>&gt;</td>
+                                    <td>ああッ！</td>
+                                </tr>
+                                <tr>
+                                    <td>&lt;</td>
+                                    <td>んんッ！</td>
+                                </tr>
+                                <tr>
+                                    <td>+</td>
+                                    <td>あッ</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>んッ</td>
+                                </tr>
+                                <tr>
+                                    <td>.</td>
+                                    <td>イク！イっちゃう！</td>
+                                </tr>
+                                <tr>
+                                    <td>,</td>
+                                    <td>入ってるの感じちゃうぅ！</td>
+                                </tr>
+                                <tr>
+                                    <td>[</td>
+                                    <td>してぇ！お願い！</td>
+                                </tr>
+                                <tr>
+                                    <td>]</td>
+                                    <td>やめないでぇ！</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-body">
+                        コンソールから<code>token.dic = token.dic_bfi</code>を入力すると、Brainfuckのインタプリンタとしても動作します。    
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <textarea class="form-control" type="text" id="code" rows="8"></textarea>
+        <h3>出力</h3>
+        <code id="result"></code>
+        <h3>メモリ</h3>
+        <div class="jumbotron" id="grid"></div>
+        <section id="debug_section">
+            <h3>デバック</h3>
+            <pre id="debug"></pre>
+            <div id="debug2"></div>
+        </section>
+    </div>
+</div>
+</body>
+</html>
